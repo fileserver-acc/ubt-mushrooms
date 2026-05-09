@@ -27,18 +27,16 @@ def extract(source: str, destination: str):
 
 
 if __name__ == "__main__":
-    indir = sys.argv[1]
+    in_path = sys.argv[1]
     outdir = sys.argv[2]
 
-    for each_path in tqdm(os.listdir(indir)):
-        if ".pdf" in each_path:
-            print(f"extracting from {each_path}...")
-            doc = fitz.Document((os.path.join(indir, each_path)))
+    print(f"extracting from {in_path}...")
+    doc = fitz.Document(in_path)
 
-            if not (os.path.exists(os.path.join(outdir, each_path.split("/").pop().split(".")[0])) and os.path.isdir(os.path.join(outdir, each_path.split("/").pop().split(".")[0]))):
-                os.makedirs(os.path.join(outdir, each_path.split("/").pop().split(".")[0]), exist_ok=True)
+    if not (os.path.exists(os.path.join(outdir, in_path.split("/").pop().split(".")[0])) and os.path.isdir(os.path.join(outdir, in_path.split("/").pop().split(".")[0]))):
+        os.makedirs(os.path.join(outdir, in_path.split("/").pop().split(".")[0]), exist_ok=True)
 
-            try:
-                extract(os.path.join(indir, each_path), os.path.join(outdir, each_path.split("/").pop().split(".")[0]))
-            except Exception as e:
-                print(f"error extracting file {each_path}: {e}", file=sys.stderr)
+    try:
+        extract(in_path, os.path.join(outdir, in_path.split("/").pop().split(".")[0]))
+    except Exception as e:
+        print(f"error extracting file {in_path}: {e}", file=sys.stderr)
