@@ -3,6 +3,8 @@ import fitz
 from tqdm import tqdm
 import sys
 from PIL import Image
+from pathlib import Path
+import shutil
 
 
 def extract(source: str, destination: str):
@@ -30,6 +32,10 @@ outdir = sys.argv[2]
 
 print(f"extracting from {in_path}...")
 doc = fitz.Document(in_path)
+
+if os.path.exists(outdir):
+    if "/tmp/" in outdir:
+        shutil.rmtree(outdir)
 
 os.makedirs(outdir)
 
