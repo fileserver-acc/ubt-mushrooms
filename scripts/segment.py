@@ -10,11 +10,15 @@ out_folder = sys.argv[3]
 try:
     model = YOLO(model_path)
 
-    os.makedirs(out_folder, exist_ok=True)
+    os.makedirs(os.path.join(out_folder, "boxes"), exist_ok=True)
 
     page_paths = []
     batch = []
-    for each_path in os.listdir(pages_folder):
+    paths = os.listdir(pages_folder)
+
+    paths.sort(key=lambda a: int(a.split("_")[0].removeprefix("image")))
+    for each_path in paths:
+        print(each_path)
         batch.append(os.path.join(pages_folder, each_path))
         if len(batch) >= 50:
             page_paths.append(batch)
@@ -30,6 +34,13 @@ try:
 
         # Process results list
         for (i, result) in enumerate(results):
+            with open(os.path.join(out_folder, "boxes/" + result.path + ".box"), "w") as file:
+                res = ""
+                for b in result.boxes.xyxy:
+                    res += str(b.tolist()) + "\n"
+                file.write(res)
+                
+
             if len(result.boxes) != 0:
                 result.save_crop(save_dir=out_folder)  # save to disk
 
