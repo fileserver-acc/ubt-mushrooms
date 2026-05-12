@@ -35,9 +35,9 @@ try:
         # Process results list
         for (i, result) in enumerate(results):
             with open(os.path.join(out_folder, "boxes/" + result.path + ".box"), "w") as file:
-                res = ""
+                res = str(result.orig_shape)
                 for b in result.boxes.xyxy:
-                    res += str(b.tolist()) + "\n"
+                    res += "\n" + str(b.tolist())
                 file.write(res)
                 
 
